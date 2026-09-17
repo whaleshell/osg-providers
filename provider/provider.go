@@ -14,13 +14,13 @@ import (
 
 // Profile is a reusable provider type (catalog entry).
 type Profile struct {
-	ID          string           `yaml:"id" json:"id"`
-	DisplayName string           `yaml:"display_name,omitempty" json:"display_name,omitempty"`
-	Description string           `yaml:"description,omitempty" json:"description,omitempty"`
-	Category    string           `yaml:"category,omitempty" json:"category,omitempty"`
+	ID          string             `yaml:"id" json:"id"`
+	DisplayName string             `yaml:"display_name,omitempty" json:"display_name,omitempty"`
+	Description string             `yaml:"description,omitempty" json:"description,omitempty"`
+	Category    string             `yaml:"category,omitempty" json:"category,omitempty"`
 	Endpoints   []policy.AllowRule `yaml:"endpoints,omitempty" json:"endpoints,omitempty"`
-	Binaries    []string         `yaml:"binaries,omitempty" json:"binaries,omitempty"`
-	Credentials []Credential     `yaml:"credentials,omitempty" json:"credentials,omitempty"`
+	Binaries    []string           `yaml:"binaries,omitempty" json:"binaries,omitempty"`
+	Credentials []Credential       `yaml:"credentials,omitempty" json:"credentials,omitempty"`
 }
 
 // Credential declares env keys for an attached instance.
@@ -39,9 +39,9 @@ type Credential struct {
 
 // Instance is a named provider on a gateway (env key refs only, no secret values).
 type Instance struct {
-	Name     string   `yaml:"name" json:"name"`
-	Type     string   `yaml:"type" json:"type"` // profile id
-	EnvVars  []string `yaml:"env_vars,omitempty" json:"env_vars,omitempty"`
+	Name    string   `yaml:"name" json:"name"`
+	Type    string   `yaml:"type" json:"type"` // profile id
+	EnvVars []string `yaml:"env_vars,omitempty" json:"env_vars,omitempty"`
 }
 
 // Validate checks a profile document.
