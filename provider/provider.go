@@ -204,17 +204,18 @@ type Layer struct {
 	EnvVars      []string // instance override; empty → profile defaults
 }
 
-// OmitProviderComposed removes network.allow rules whose id is prefixed with
+// OmitProviderComposed removes network_policies rules whose id is prefixed with
 // "provider." (stamped by EffectivePolicy). Use when accepting a policy set that may have
 // been edited from `policy get --full` so provider-composed entries are not duplicated
 // into the durable base (OpenShell: edit --base, not --full).
 func OmitProviderComposed(doc policy.Document) (policy.Document, int) {
-	if doc.Network == nil || len(doc.Network.Allow) == 0 {
+	allows := doc.NetworkAllows()
+	if len(allows) == 0 {
 		return doc, 0
 	}
-	kept := make([]policy.AllowRule, 0, len(doc.Network.Allow))
+	kept := make([]policy.AllowRule, 0, len(allows))
 	n := 0
-	for _, r := range doc.Network.Allow {
+	for _, r := range allows {
 		id := strings.TrimSpace(r.ID)
 		if strings.HasPrefix(id, "provider.") {
 			n++
@@ -226,9 +227,7 @@ func OmitProviderComposed(doc policy.Document) (policy.Document, int) {
 		return doc, 0
 	}
 	out := doc
-	netCopy := *doc.Network
-	netCopy.Allow = kept
-	out.Network = &netCopy
+	out.SetNetworkAllows(kept)
 	return out, n
 }
 
@@ -236,13 +235,7 @@ func OmitProviderComposed(doc policy.Document) (policy.Document, int) {
 // base + provider-composed profile entries (unless suppressProviders).
 func EffectivePolicy(base policy.Document, layers []Layer, suppressProviders bool) policy.Document {
 	out := base
-	if out.Network == nil {
-		out.Network = &policy.Network{Default: "deny"}
-	} else {
-		netCopy := *out.Network
-		netCopy.Allow = append([]policy.AllowRule{}, out.Network.Allow...)
-		out.Network = &netCopy
-	}
+	allows := append([]policy.AllowRule{}, out.NetworkAllows()...)
 	if out.Credentials == nil {
 		out.Credentials = &policy.Credentials{}
 	} else {
@@ -251,6 +244,7 @@ func EffectivePolicy(base policy.Document, layers []Layer, suppressProviders boo
 		out.Credentials = &credCopy
 	}
 	if suppressProviders {
+		out.SetNetworkAllows(allows)
 		return out
 	}
 	envSeen := map[string]struct{}{}
@@ -293,7 +287,7 @@ func EffectivePolicy(base policy.Document, layers []Layer, suppressProviders boo
 				rule.Binaries = append([]string{}, p.Binaries...)
 			}
 			rule.CredentialKeys = append([]string{}, keys...)
-			out.Network.Allow = append(out.Network.Allow, rule)
+			allows = append(allows, rule)
 		}
 		for _, k := range guestKeys {
 			if _, ok := envSeen[k]; ok {
@@ -303,6 +297,7 @@ func EffectivePolicy(base policy.Document, layers []Layer, suppressProviders boo
 			out.Credentials.EnvAllow = append(out.Credentials.EnvAllow, k)
 		}
 	}
+	out.SetNetworkAllows(allows)
 	return out
 }
 

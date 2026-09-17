@@ -67,10 +67,7 @@ func TestDiscoverEnvVars(t *testing.T) {
 }
 
 func TestEffectivePolicy(t *testing.T) {
-	base := policy.Document{
-		Version: 1,
-		Network: &policy.Network{Default: "deny"},
-	}
+	base := policy.Document{Version: 1}
 	p := Profile{
 		ID: "nvidia",
 		Endpoints: []policy.AllowRule{{
@@ -86,51 +83,47 @@ func TestEffectivePolicy(t *testing.T) {
 		t.Fatal(err)
 	}
 	out := EffectivePolicy(base, []Layer{{InstanceName: "nv", Profile: p}}, false)
-	if len(out.Network.Allow) != 1 {
-		t.Fatalf("allow=%d", len(out.Network.Allow))
+	allows := out.NetworkAllows()
+	if len(allows) != 1 {
+		t.Fatalf("allow=%d", len(allows))
 	}
-	if out.Network.Allow[0].ID != "provider.nv.0" {
-		t.Fatalf("id=%s", out.Network.Allow[0].ID)
+	if allows[0].ID != "provider.nv.0" {
+		t.Fatalf("id=%s", allows[0].ID)
 	}
-	if len(out.Network.Allow[0].Binaries) != 1 {
-		t.Fatalf("binaries=%v", out.Network.Allow[0].Binaries)
+	if len(allows[0].Binaries) != 1 {
+		t.Fatalf("binaries=%v", allows[0].Binaries)
 	}
 	if out.Credentials == nil || len(out.Credentials.EnvAllow) != 1 || out.Credentials.EnvAllow[0] != "NVIDIA_API_KEY" {
 		t.Fatalf("env=%v", out.Credentials)
 	}
-	if len(base.Network.Allow) != 0 {
-		t.Fatalf("base mutated: %d", len(base.Network.Allow))
+	if len(base.NetworkAllows()) != 0 {
+		t.Fatalf("base mutated: %d", len(base.NetworkAllows()))
 	}
-	fresh := policy.Document{Version: 1, Network: &policy.Network{Default: "deny"}}
+	fresh := policy.Document{Version: 1}
 	suppressed := EffectivePolicy(fresh, []Layer{{InstanceName: "nv", Profile: p}}, true)
-	if len(suppressed.Network.Allow) != 0 {
-		t.Fatalf("expected suppress, got %d", len(suppressed.Network.Allow))
+	if len(suppressed.NetworkAllows()) != 0 {
+		t.Fatalf("expected suppress, got %d", len(suppressed.NetworkAllows()))
 	}
 }
 
 func TestOmitProviderComposed(t *testing.T) {
-	doc := policy.Document{
-		Version: 1,
-		Network: &policy.Network{
-			Default: "deny",
-			Allow: []policy.AllowRule{
-				{ID: "github-push", Host: "github.com", Port: 443},
-				{ID: "provider.gh.api", Host: "api.github.com", Port: 443},
-				{ID: "provider.gh.git", Host: "github.com", Port: 443},
-			},
-		},
-	}
+	doc := policy.Document{Version: 1}
+	doc.SetNetworkAllows([]policy.AllowRule{
+		{ID: "github-push", Host: "github.com", Port: 443},
+		{ID: "provider.gh.api", Host: "api.github.com", Port: 443},
+		{ID: "provider.gh.git", Host: "github.com", Port: 443},
+	})
 	out, n := OmitProviderComposed(doc)
 	if n != 2 {
 		t.Fatalf("stripped=%d", n)
 	}
-	if len(out.Network.Allow) != 1 || out.Network.Allow[0].ID != "github-push" {
-		t.Fatalf("%+v", out.Network.Allow)
+	allows := out.NetworkAllows()
+	if len(allows) != 1 || allows[0].ID != "github-push" {
+		t.Fatalf("%+v", allows)
 	}
-	if len(doc.Network.Allow) != 3 {
+	if len(doc.NetworkAllows()) != 3 {
 		t.Fatalf("input mutated")
 	}
-	// Re-compose must not duplicate when base was stripped.
 	p := Profile{
 		ID: "github",
 		Endpoints: []policy.AllowRule{
@@ -139,8 +132,8 @@ func TestOmitProviderComposed(t *testing.T) {
 		Credentials: []Credential{{Name: "t", EnvVars: []string{"GITHUB_TOKEN"}}},
 	}
 	eff := EffectivePolicy(out, []Layer{{InstanceName: "gh", Profile: p}}, false)
-	if len(eff.Network.Allow) != 2 {
-		t.Fatalf("effective allow=%d %+v", len(eff.Network.Allow), eff.Network.Allow)
+	if len(eff.NetworkAllows()) != 2 {
+		t.Fatalf("effective allow=%d %+v", len(eff.NetworkAllows()), eff.NetworkAllows())
 	}
 }
 
