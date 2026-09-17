@@ -3,7 +3,7 @@ module github.com/zorneth/osg-providers
 go 1.27.0
 
 require (
-	github.com/zorneth/osg-core v0.0.0
+	github.com/zorneth/osg-core v0.1.0-alpha.1
 	gopkg.in/yaml.v3 v3.0.1
 )
 

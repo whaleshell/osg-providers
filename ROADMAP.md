@@ -1,0 +1,15 @@
+# Roadmap — osg-providers
+
+Status: **v0.1.0-alpha.1** (alpha) · Depends on [osg-core](https://github.com/zorneth/osg-core) `v0.1.0-alpha.1`
+
+## This module
+
+| ID | Item | Notes |
+|----|------|-------|
+| P1 | **Profile catalog growth** | More OpenShell-parity providers + discovery helpers |
+| P2 | **Compose idempotency** | Harden `OmitProviderComposed` / `--full` edit flows |
+| P3 | **Custom profiles UX** | Gateway import validation + docs |
+
+## Release
+
+Requires osg-core `v0.1.0-alpha.1` · tagged after core in the cascade.
