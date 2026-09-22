@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: Copyright (c) 2026 the osg authors
+# SPDX-FileCopyrightText: Copyright (c) 2026 the whaleshell authors
 # SPDX-License-Identifier: MIT
 #
 # gogpu-style CI: format, lint, cross-platform build + test
@@ -6,6 +6,7 @@ name: CI
 
 env:
   CGO_ENABLED: "0"
+  GOWORK: ${{ github.workspace }}/go.work
 
 on:
   push:
@@ -22,20 +23,45 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: osg-providers
+        working-directory: whaleshell-providers
     steps:
 
-      - name: Checkout osg-providers
+      - name: Checkout whaleshell-providers
         uses: actions/checkout@v4
         with:
-          path: osg-providers
+          path: whaleshell-providers
 
-      - name: Checkout osg-core
+      - name: Checkout whaleshell-core
         uses: actions/checkout@v4
         with:
           repository: zorneth/osg-core
-          path: osg-core
+          path: whaleshell-core
           ref: main
+
+      - name: Write go.work
+        run: |
+          set -euo pipefail
+          {
+            echo 'go 1.27.0'
+            echo 'use ('
+            for d in whaleshell-* slogx; do
+              if [[ -d "$d" ]]; then
+                echo "  ./$d"
+              fi
+            done
+            echo ')'
+            echo 'replace ('
+            for d in whaleshell-*; do
+              if [[ -d "$d" ]]; then
+                echo "  github.com/whaleshell/${d} v0.1.0-alpha.1 => ./$d"
+              fi
+            done
+            if [[ -d slogx ]]; then
+              echo '  github.com/whaleshell/slogx v0.1.0-alpha.1 => ./slogx'
+            fi
+            echo ')'
+          } > "${{ github.workspace }}/go.work"
+          echo "Wrote go.work:" && cat "${{ github.workspace }}/go.work"
 
       - uses: actions/setup-go@v5
         with:
@@ -57,20 +83,45 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: osg-providers
+        working-directory: whaleshell-providers
     steps:
 
-      - name: Checkout osg-providers
+      - name: Checkout whaleshell-providers
         uses: actions/checkout@v4
         with:
-          path: osg-providers
+          path: whaleshell-providers
 
-      - name: Checkout osg-core
+      - name: Checkout whaleshell-core
         uses: actions/checkout@v4
         with:
           repository: zorneth/osg-core
-          path: osg-core
+          path: whaleshell-core
           ref: main
+
+      - name: Write go.work
+        run: |
+          set -euo pipefail
+          {
+            echo 'go 1.27.0'
+            echo 'use ('
+            for d in whaleshell-* slogx; do
+              if [[ -d "$d" ]]; then
+                echo "  ./$d"
+              fi
+            done
+            echo ')'
+            echo 'replace ('
+            for d in whaleshell-*; do
+              if [[ -d "$d" ]]; then
+                echo "  github.com/whaleshell/${d} v0.1.0-alpha.1 => ./$d"
+              fi
+            done
+            if [[ -d slogx ]]; then
+              echo '  github.com/whaleshell/slogx v0.1.0-alpha.1 => ./slogx'
+            fi
+            echo ')'
+          } > "${{ github.workspace }}/go.work"
+          echo "Wrote go.work:" && cat "${{ github.workspace }}/go.work"
 
       - uses: actions/setup-go@v5
         with:
@@ -80,7 +131,7 @@ jobs:
         uses: golangci/golangci-lint-action@v8
         with:
           version: latest
-          working-directory: osg-providers
+          working-directory: whaleshell-providers
           args: --timeout=5m
 
   build:
@@ -92,20 +143,45 @@ jobs:
         os: [ubuntu-latest, macos-latest, windows-latest]
     defaults:
       run:
-        working-directory: osg-providers
+        working-directory: whaleshell-providers
     steps:
 
-      - name: Checkout osg-providers
+      - name: Checkout whaleshell-providers
         uses: actions/checkout@v4
         with:
-          path: osg-providers
+          path: whaleshell-providers
 
-      - name: Checkout osg-core
+      - name: Checkout whaleshell-core
         uses: actions/checkout@v4
         with:
           repository: zorneth/osg-core
-          path: osg-core
+          path: whaleshell-core
           ref: main
+
+      - name: Write go.work
+        run: |
+          set -euo pipefail
+          {
+            echo 'go 1.27.0'
+            echo 'use ('
+            for d in whaleshell-* slogx; do
+              if [[ -d "$d" ]]; then
+                echo "  ./$d"
+              fi
+            done
+            echo ')'
+            echo 'replace ('
+            for d in whaleshell-*; do
+              if [[ -d "$d" ]]; then
+                echo "  github.com/whaleshell/${d} v0.1.0-alpha.1 => ./$d"
+              fi
+            done
+            if [[ -d slogx ]]; then
+              echo '  github.com/whaleshell/slogx v0.1.0-alpha.1 => ./slogx'
+            fi
+            echo ')'
+          } > "${{ github.workspace }}/go.work"
+          echo "Wrote go.work:" && cat "${{ github.workspace }}/go.work"
 
       - uses: actions/setup-go@v5
         with:
@@ -125,20 +201,45 @@ jobs:
         os: [ubuntu-latest, macos-latest, windows-latest]
     defaults:
       run:
-        working-directory: osg-providers
+        working-directory: whaleshell-providers
     steps:
 
-      - name: Checkout osg-providers
+      - name: Checkout whaleshell-providers
         uses: actions/checkout@v4
         with:
-          path: osg-providers
+          path: whaleshell-providers
 
-      - name: Checkout osg-core
+      - name: Checkout whaleshell-core
         uses: actions/checkout@v4
         with:
           repository: zorneth/osg-core
-          path: osg-core
+          path: whaleshell-core
           ref: main
+
+      - name: Write go.work
+        run: |
+          set -euo pipefail
+          {
+            echo 'go 1.27.0'
+            echo 'use ('
+            for d in whaleshell-* slogx; do
+              if [[ -d "$d" ]]; then
+                echo "  ./$d"
+              fi
+            done
+            echo ')'
+            echo 'replace ('
+            for d in whaleshell-*; do
+              if [[ -d "$d" ]]; then
+                echo "  github.com/whaleshell/${d} v0.1.0-alpha.1 => ./$d"
+              fi
+            done
+            if [[ -d slogx ]]; then
+              echo '  github.com/whaleshell/slogx v0.1.0-alpha.1 => ./slogx'
+            fi
+            echo ')'
+          } > "${{ github.workspace }}/go.work"
+          echo "Wrote go.work:" && cat "${{ github.workspace }}/go.work"
 
       - uses: actions/setup-go@v5
         with:

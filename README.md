@@ -1,24 +1,24 @@
-<h1 align="center">osg-providers</h1>
+<h1 align="center">whaleshell-providers</h1>
 
 <p align="center">
   <strong>Provider catalog & compose</strong><br>
   Builtin provider profiles and effective-policy composition for sandboxes.
 </p>
 <p align="center">
-  <a href="https://github.com/zorneth/osg-providers/actions/workflows/ci.yml"><img src="https://github.com/zorneth/osg-providers/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
-  <a href="https://pkg.go.dev/github.com/zorneth/osg-providers"><img src="https://pkg.go.dev/badge/github.com/zorneth/osg-providers.svg" alt="Go Reference"></a>
+  <a href="https://github.com/whaleshell/whaleshell-providers/actions/workflows/ci.yml"><img src="https://github.com/whaleshell/whaleshell-providers/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
+  <a href="https://pkg.go.dev/github.com/whaleshell/whaleshell-providers"><img src="https://pkg.go.dev/badge/github.com/whaleshell/whaleshell-providers.svg" alt="Go Reference"></a>
   <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License"></a>
-  <a href="https://github.com/zorneth/osg-providers"><img src="https://img.shields.io/badge/Go-1.27+-00ADD8?logo=go" alt="Go Version"></a>
+  <a href="https://github.com/whaleshell/whaleshell-providers"><img src="https://img.shields.io/badge/Go-1.27+-00ADD8?logo=go" alt="Go Version"></a>
 </p>
 <p align="center">
-  <sub>Part of the <a href="https://github.com/zorneth">zorneth / osg</a> ecosystem</sub>
+  <sub>Part of the <a href="https://github.com/whaleshell">whaleshell / whaleshell</a> ecosystem</sub>
 </p>
 
 ---
 
 ## Overview
 
-**osg-providers** ships YAML provider profiles (Cursor, GitHub, NVIDIA, …) and composes them onto a base policy to produce the effective network/credential set a sandbox runs with.
+**whaleshell-providers** ships YAML provider profiles (Cursor, GitHub, NVIDIA, …) and composes them onto a base policy to produce the effective network/credential set a sandbox runs with.
 
 ### Key Features
 
@@ -34,7 +34,7 @@
 ## Installation
 
 ```bash
-go get github.com/zorneth/osg-providers@latest
+go get github.com/whaleshell/whaleshell-providers@latest
 ```
 
 **Requirements:** Go 1.27+
@@ -45,8 +45,8 @@ go get github.com/zorneth/osg-providers@latest
 
 ```go
 import (
-    "github.com/zorneth/osg-core/policy"
-    "github.com/zorneth/osg-providers/provider"
+    "github.com/whaleshell/whaleshell-core/policy"
+    "github.com/whaleshell/whaleshell-providers/provider"
 )
 
 base, _ := policy.Load("base.yaml")
@@ -77,10 +77,10 @@ Profiles: [`profiles/`](./profiles/).
 | Resource | Link |
 |----------|------|
 | Roadmap | [ROADMAP.md](./ROADMAP.md) |
-| Organization | [https://github.com/zorneth](https://github.com/zorneth) |
-| Organization overview | [github.com/zorneth](https://github.com/zorneth) |
-| pkg.go.dev | [`github.com/zorneth/osg-providers`](https://pkg.go.dev/github.com/zorneth/osg-providers) |
+| Organization | [https://github.com/whaleshell](https://github.com/whaleshell) |
+| Organization overview | [github.com/whaleshell](https://github.com/whaleshell) |
+| pkg.go.dev | [`github.com/whaleshell/whaleshell-providers`](https://pkg.go.dev/github.com/whaleshell/whaleshell-providers) |
 
 ## License
 
-[MIT](./LICENSE) © zorneth
+[MIT](./LICENSE) © whaleshell

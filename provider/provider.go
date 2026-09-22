@@ -8,7 +8,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/zorneth/osg-core/policy"
+	"github.com/whaleshell/whaleshell-core/policy"
 	"gopkg.in/yaml.v3"
 )
 
@@ -24,7 +24,7 @@ type Profile struct {
 }
 
 // Credential declares env keys for an attached instance.
-// Values live in the gateway secret store; guests see osg:resolve:env:KEY
+// Values live in the gateway secret store; guests see whaleshell:resolve:env:KEY
 // placeholders unless InjectEnv is false (sidecar-only — Cursor OAuth path).
 type Credential struct {
 	Name      string   `yaml:"name" json:"name"`
@@ -132,7 +132,7 @@ func (p Profile) EnvKeys() []string {
 }
 
 // GuestEnvKeys returns credential env keys that should be injected into the guest
-// as osg:resolve:env placeholders (excludes inject_env: false).
+// as whaleshell:resolve:env placeholders (excludes inject_env: false).
 func (p Profile) GuestEnvKeys() []string {
 	var out []string
 	seen := map[string]struct{}{}
@@ -170,7 +170,7 @@ func (p Profile) DiscoverEnvVars() ([]string, error) {
 			}
 			if v, ok := os.LookupEnv(k); ok && strings.TrimSpace(v) != "" {
 				// Host may leak guest placeholders into the process env — treat as missing.
-				if strings.HasPrefix(strings.TrimSpace(v), "osg:resolve:env:") ||
+				if strings.HasPrefix(strings.TrimSpace(v), "whaleshell:resolve:env:") ||
 					strings.HasPrefix(strings.TrimSpace(v), "openshell:resolve:env:") {
 					continue
 				}
@@ -306,8 +306,8 @@ func FindBuiltinDir() string {
 	candidates := []string{}
 	if wd, err := os.Getwd(); err == nil {
 		candidates = append(candidates,
-			filepath.Join(wd, "osg-providers", "profiles"),
-			filepath.Join(wd, "osg-cli", "providers"),
+			filepath.Join(wd, "whaleshell-providers", "profiles"),
+			filepath.Join(wd, "whaleshell-cli", "providers"),
 			filepath.Join(wd, "providers"),
 			filepath.Join(wd, "profiles"),
 		)
@@ -319,8 +319,8 @@ func FindBuiltinDir() string {
 			filepath.Join(dir, "providers"),
 			filepath.Join(dir, "..", "profiles"),
 			filepath.Join(dir, "..", "providers"),
-			filepath.Join(dir, "..", "osg-providers", "profiles"),
-			filepath.Join(dir, "..", "osg-cli", "providers"),
+			filepath.Join(dir, "..", "whaleshell-providers", "profiles"),
+			filepath.Join(dir, "..", "whaleshell-cli", "providers"),
 		)
 	}
 	for _, c := range candidates {
