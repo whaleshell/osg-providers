@@ -34,7 +34,7 @@ jobs:
       - name: Checkout whaleshell-core
         uses: actions/checkout@v4
         with:
-          repository: whaleshell/osg-core
+          repository: whaleshell/whaleshell-core
           path: whaleshell-core
           ref: main
 
@@ -99,7 +99,7 @@ jobs:
       - name: Checkout whaleshell-core
         uses: actions/checkout@v4
         with:
-          repository: whaleshell/osg-core
+          repository: whaleshell/whaleshell-core
           path: whaleshell-core
           ref: main
 
@@ -164,7 +164,7 @@ jobs:
       - name: Checkout whaleshell-core
         uses: actions/checkout@v4
         with:
-          repository: whaleshell/osg-core
+          repository: whaleshell/whaleshell-core
           path: whaleshell-core
           ref: main
 
@@ -227,7 +227,7 @@ jobs:
       - name: Checkout whaleshell-core
         uses: actions/checkout@v4
         with:
-          repository: whaleshell/osg-core
+          repository: whaleshell/whaleshell-core
           path: whaleshell-core
           ref: main
 
