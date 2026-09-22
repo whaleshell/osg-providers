@@ -34,11 +34,13 @@ jobs:
       - name: Checkout whaleshell-core
         uses: actions/checkout@v4
         with:
-          repository: zorneth/osg-core
+          repository: whaleshell/osg-core
           path: whaleshell-core
           ref: main
 
       - name: Write go.work
+        working-directory: ${{ github.workspace }}
+        shell: bash
         run: |
           set -euo pipefail
           {
@@ -67,6 +69,9 @@ jobs:
         with:
           go-version: "1.27"
           cache: true
+          cache-dependency-path: |
+            whaleshell-*/go.sum
+            slogx/go.sum
       - name: Check gofmt
         run: |
           set -euo pipefail
@@ -94,11 +99,13 @@ jobs:
       - name: Checkout whaleshell-core
         uses: actions/checkout@v4
         with:
-          repository: zorneth/osg-core
+          repository: whaleshell/osg-core
           path: whaleshell-core
           ref: main
 
       - name: Write go.work
+        working-directory: ${{ github.workspace }}
+        shell: bash
         run: |
           set -euo pipefail
           {
@@ -127,6 +134,9 @@ jobs:
         with:
           go-version: "1.27"
           cache: true
+          cache-dependency-path: |
+            whaleshell-*/go.sum
+            slogx/go.sum
       - name: golangci-lint
         uses: golangci/golangci-lint-action@v8
         with:
@@ -154,11 +164,13 @@ jobs:
       - name: Checkout whaleshell-core
         uses: actions/checkout@v4
         with:
-          repository: zorneth/osg-core
+          repository: whaleshell/osg-core
           path: whaleshell-core
           ref: main
 
       - name: Write go.work
+        working-directory: ${{ github.workspace }}
+        shell: bash
         run: |
           set -euo pipefail
           {
@@ -187,6 +199,9 @@ jobs:
         with:
           go-version: "1.27"
           cache: true
+          cache-dependency-path: |
+            whaleshell-*/go.sum
+            slogx/go.sum
       - name: Download modules
         run: go mod download
       - name: Build
@@ -212,11 +227,13 @@ jobs:
       - name: Checkout whaleshell-core
         uses: actions/checkout@v4
         with:
-          repository: zorneth/osg-core
+          repository: whaleshell/osg-core
           path: whaleshell-core
           ref: main
 
       - name: Write go.work
+        working-directory: ${{ github.workspace }}
+        shell: bash
         run: |
           set -euo pipefail
           {
@@ -245,6 +262,9 @@ jobs:
         with:
           go-version: "1.27"
           cache: true
+          cache-dependency-path: |
+            whaleshell-*/go.sum
+            slogx/go.sum
       - name: Download modules
         run: go mod download
       - name: Vet
